@@ -30,17 +30,18 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
     list_of_product_names = []
 
     try:
+        # Fix the URL construction by adding a slash between the repo URL and 'contents'
         url = (
             git_base_url.replace("https://github", "https://api.github", 1)
             .replace(".com/", ".com/repos/", 1)
-            + "contents/" + file_path_to_download + "?ref=" + git_branch
+            + "/contents/" + file_path_to_download + "?ref=" + git_branch
         )
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
         cmd = "curl -k -H " + curl_auth_header + " '" + url + "'"
         print(INFO + "Getting all Products names from: ", url)
         download_file_from_git_res = shell_command.shcmd(cmd)
         response_json = json.loads(download_file_from_git_res['stdout'])
-        
+
         # Debug output to verify the response
         print(INFO + "GitHub API Response:", response_json)
         
@@ -67,7 +68,6 @@ def download_file_from_git_enterprise(git_base_url, git_branch, git_priv_token, 
             + local_target_dir + "/" + filename_to_download + ".yaml"
             + " && cat " + local_target_dir + "/" + filename_to_download + ".yaml"
         )
-        # print("my command: ", cmd)
         if not os.path.isdir(local_target_dir):
             os.makedirs(local_target_dir)
 
