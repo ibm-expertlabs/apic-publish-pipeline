@@ -110,7 +110,7 @@ def orchestrate():
                                                                    os.environ["PROV_ORG_OWNER_PASSWORD"],
                                                                    os.environ["PROV_ORG_REALM"],
                                                                    toolkit_credentials["toolkit"]["client_id"],
-                                                                   toolkit_credentials["toolkit"]["client_secret"])
+                                                                   toolkit_credentials["client_secret"])
 
         if "access_token" in gbt_resp:
             var_bearer_token = gbt_resp['access_token']
@@ -125,16 +125,16 @@ def orchestrate():
                                                                     os.environ["PROV_ORG_TITLE"].strip().replace(" ","-").lower(),
                                                                     os.environ["PROV_ORG_CATALOG_NAME"], 
                                                                     WORKING_DIR_BASIC,
-                                                                    product_file_name,
-                                                                    var_bearer_token)
+                                                                    product_file_name)
                 if "errorresponse" in publish_resp:
                     apic_publish_audit[product_file_name] = "FAILED" + publish_resp['errorresponse']
                 elif "state" in publish_resp:
                     apic_publish_audit[product_file_name] = "SUCCESS"
                 else:
-                    apic_publish_audit[product_file_name] = "FAILED" + publish_resp['errorresponse']
+                    print(INFO + "Unexpected publish response: ", publish_resp)
+                    apic_publish_audit[product_file_name] = "FAILED: Unexpected response"
             
-            print(INFO + "apic_publish_audit: ",apic_publish_audit)
+            print(INFO + "apic_publish_audit: ", apic_publish_audit)
             Audit_res.update_apic_publish_audit(WORKING_DIR_BASIC, apic_publish_audit)
             
             isSuccess = True
