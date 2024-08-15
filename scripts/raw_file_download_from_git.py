@@ -40,11 +40,17 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
                 if '.yaml' in product_name:
                     list_of_product_names.append(product_name.replace(".yaml", ""))
         else:
-            raise Exception("Unexpected response format. Expected a list but got " + str(type(response_json)))
+            # Check if it's a 404 error
+            if response_json.get("message") == "Not Found":
+                raise Exception(f"Error 404: The path '{file_path_to_download}' was not found in the repository.")
+            else:
+                raise Exception("Unexpected response format. Expected a list but got " + str(type(response_json)))
 
         return list_of_product_names
     except Exception as e:
-        raise Exception("ERROR in " + FILE_NAME + " : " + repr(e))
+        print(f"[ERROR] - Exception in {FILE_NAME}: {repr(e)}")
+        # Retry logic or further handling can be added here
+        raise Exception(f"Failed to retrieve file names from '{file_path_to_download}'. Please check if the path exists and is accessible.")
 
 if __name__ == "__main__":
     # Example usage - replace with actual values
