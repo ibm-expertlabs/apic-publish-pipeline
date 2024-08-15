@@ -15,34 +15,31 @@ def get_toolkit_credentials(CONFIG_FILES_DIR):
 
 def get_env_config(CONFIG_FILES_DIR):
     env_config = None
-    config_path = CONFIG_FILES_DIR + "/config.json"
-
-    if os.path.isfile(config_path):
-        with open(config_path, 'r') as f:
+    if os.path.isfile(CONFIG_FILES_DIR + "/config.json"):
+        with open(CONFIG_FILES_DIR + "/config.json") as f:
             config_content = f.read()
-            # Debugging print statement to see the content before JSON parsing
-            print(INFO + "Config content before JSON parsing:")
-            print(config_content)  # Output the raw JSON content
 
-            try:
+            # Check if multiple JSON objects are present
+            json_objects = config_content.split('}{')
+            if len(json_objects) > 1:
+                print(INFO + "Multiple JSON objects detected. Merging them.")
+                # Fix the split by adding back the missing braces
+                json_objects = [json_objects[0] + '}', '{' + json_objects[1]]
+                # Convert the JSON strings into dictionaries
+                env_config_1 = json.loads(json_objects[0])
+                env_config_2 = json.loads(json_objects[1])
+                # Merge the dictionaries
+                env_config = {**env_config_1, **env_config_2}
+            else:
                 env_config = json.loads(config_content)
-            except json.JSONDecodeError as e:
-                print(INFO + "JSON Decode Error:", e)
-                raise
+            
     else:
         env_config = {}
 
+    print(INFO + "Final combined env_config: ", env_config)
     return env_config
 
 def pretty_print_request(req):
-    """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in 
-    this function because it is programmed to be pretty 
-    printed and may differ from the actual request.
-    """
     print(INFO + "---------- Request start ----------")
     print(INFO + req.method + ' ' + req.url)
     for k, v in req.headers.items():
