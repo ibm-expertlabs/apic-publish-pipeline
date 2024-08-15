@@ -9,13 +9,13 @@ spec:
       params:
       # GitHub url where the pipeline scripts are stored. These are the scripts the pipeline will execute.
       - name: git-apic-pipeline-git-url
-        value: 'https://github.ibm.com/techaeta/apic-pipeline.git'
+        value: 'https://github.com/ibm-expertlabs/apic-publish-pipeline.git'
       # Github branch for the pipeline scripts.
       - name: git-apic-pipeline-git-branch
         value: 'master'
       # GitHub url where the products and APIs definitions are stored.
       - name: git-apic-yaml-url
-        value: 'https://github.ibm.com/techaeta/apic-yaml/'
+        value: 'https://github.com/ibm-expertlabs/apic-products-apis-yaml.git'
       # GitHub branch for the products and APIs.
       - name: git-apic-yaml-branch
         value: 'master'
