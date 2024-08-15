@@ -10,11 +10,11 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
     list_of_product_names = []
 
     try:
-        # Construct the URL
+        # Corrected URL construction to avoid the .gitcontents error
         url = (
             git_base_url.replace("https://github", "https://api.github", 1)
             .replace(".com/", ".com/repos/", 1)
-            + "contents/" + file_path_to_download + "?ref=" + git_branch
+            + "/contents/" + file_path_to_download + "?ref=" + git_branch
         )
         curl_auth_header = "'Authorization: token " + git_priv_token + "'"
         cmd = "curl -k -H " + curl_auth_header + " '" + url + "'"
