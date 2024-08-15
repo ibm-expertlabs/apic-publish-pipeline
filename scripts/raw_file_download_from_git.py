@@ -10,7 +10,7 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
     list_of_product_names = []
 
     try:
-        # Construct the correct URL
+        # Correct the URL structure
         url = f"{git_base_url}/repos/ibm-expertlabs/apic-products-apis-yaml/contents/{file_path_to_download}?ref={git_branch}"
         headers = {
             'Authorization': f"token {git_priv_token}"
@@ -23,9 +23,9 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
         
         download_file_from_git_res = shell_command.shcmd(cmd)
         
-        if download_file_from_git_res['stdout'].strip() == "":
+        if not download_file_from_git_res['stdout'].strip():
             raise Exception("No response received from the GitHub API. Check the URL or token.")
-
+        
         response_json = json.loads(download_file_from_git_res['stdout'])
 
         # Debug output to verify the response
