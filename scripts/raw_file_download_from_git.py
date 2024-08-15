@@ -26,6 +26,10 @@ def get_all_file_names_from_git_enterprise(git_base_url, git_branch, git_priv_to
         
         download_file_from_git_res = shell_command.shcmd(cmd)
         
+        # Check if the response is empty
+        if not download_file_from_git_res['stdout'].strip():
+            raise Exception("No response received from the GitHub API. Check the URL or token.")
+
         # Debug the raw response
         print(INFO + "Raw API Response:", download_file_from_git_res['stdout'])
         
