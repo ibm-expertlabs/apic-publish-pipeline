@@ -15,11 +15,23 @@ def get_toolkit_credentials(CONFIG_FILES_DIR):
 
 def get_env_config(CONFIG_FILES_DIR):
     env_config = None
-    if os.path.isfile(CONFIG_FILES_DIR + "/config.json"):
-        with open(CONFIG_FILES_DIR + "/config.json") as f:
-            env_config = json.load(f)
+    config_path = CONFIG_FILES_DIR + "/config.json"
+
+    if os.path.isfile(config_path):
+        with open(config_path, 'r') as f:
+            config_content = f.read()
+            # Debugging print statement to see the content before JSON parsing
+            print(INFO + "Config content before JSON parsing:")
+            print(config_content)  # Output the raw JSON content
+
+            try:
+                env_config = json.loads(config_content)
+            except json.JSONDecodeError as e:
+                print(INFO + "JSON Decode Error:", e)
+                raise
     else:
         env_config = {}
+
     return env_config
 
 def pretty_print_request(req):
